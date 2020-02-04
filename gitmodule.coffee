@@ -44,6 +44,16 @@ gitmodule.addAll = (base) ->
     await git(base).add(".")
     return
 
+gitmodule.add = (base, path) ->
+    log "gitmodule.addAll"
+    result = await git(base).add(path)
+    return result
+
+gitmodule.commit = (base, message) ->
+    log "gitmodule.commit"
+    result = await git(base).commit(message)
+    return result
+
 gitmodule.init = (base, remote) ->
     log "gitmodule.init"
     await git(base).init()
@@ -73,6 +83,74 @@ gitmodule.clone = (remote, base) ->
     if !url then throw "No URL to clone available for RemoteObject!"
     await git(base).clone(url)
     return
+
+gitmodule.stash = (base) ->
+    log "gitmodule.stash"
+    result = await git(base).stash()
+    return result
+
+gitmodule.stashPop = (base) ->
+    log "gitmodule.stashPop"
+    result = await git(base).stash(["pop"])
+    return result
+
+gitmodule.restoreStaged = (base, path) ->
+    log "gitmodule.restoreStaged"
+    result = await git(base).raw(
+        [
+            'restore',
+            '--staged',
+            path
+        ]
+    )
+    return result
+
+gitmodule.deinitSubmodule = (base, modulePath) ->
+    log "gitmodule.deinitSubmodule"
+    result = await git(base).raw(
+        [
+            'submodule',
+            'deinit',
+            '-f',
+            '--',
+            modulePath
+        ]
+    )
+    return result
+
+gitmodule.rmCached = (base, path) ->
+    log "gitmodule.rmCached"
+    result = await git(base).raw(
+        [
+            'rm',
+            '--cached',
+            '-r',
+            path
+        ]
+    )
+    return result
+
+gitmodule.getGitRoot = (base) ->
+    log "gitmodule.getGitRoot"
+    result = await git(base).raw(
+        [
+            'rev-parse',
+            '--show-toplevel'
+        ]
+    )
+    return result
+
+gitmodule.getOriginURL = (base) ->
+    log "gitmodule.getOriginURL"
+    result = await git(base).raw(
+        [
+            'config',
+            '--get',
+            'remote.origin.url'
+        ]
+    )
+    return result
+
 #endregion
 
 module.exports = gitmodule
