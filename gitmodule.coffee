@@ -22,9 +22,6 @@ gitmodule.initialize = () ->
     globalScope = allModules.globalscopemodule
     return
     
-#region internalFunctions
-#endregion
-
 #region exposedFunctions
 gitmodule.addSubmodule = (base, remote, label) ->
     log "gitmodule.addSubmodule"
